@@ -1,4 +1,4 @@
-import { UPDATE_VALUE } from '../actions/actionTypes';
+import { UPDATE_VALUE, SAVE_TODO, DELETE_TODO, TOGGLE_COMPLETED } from '../actions/actionTypes';
 
 const INITIAL_STATE = {
   value: '',
@@ -12,6 +12,23 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       value: action.payload
     };
+    case SAVE_TODO:
+      return state.value ? //ternario
+       {
+        ...state, //spread operation
+        todos: [...state.todos, { value: state.value, completed: false } ],
+        value: ''
+      }
+      : state;
+    case DELETE_TODO:
+      return {
+        ...state,
+        todos: state.todos.filter((_, i) => action.payload !== i)
+      }
+    case TOGGLE_COMPLETED:
+      return {
+        ...state,
+        todos: state.todos.map((todo, i) => action.payload === i ? {...todo, completed: ! todo.completed} : todo)}
     default:
       return state;
   }
